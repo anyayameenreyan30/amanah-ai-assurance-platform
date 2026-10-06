@@ -1,0 +1,8 @@
+numpy>=1.26
+scipy>=1.11
+scikit-learn>=1.4
+networkx>=3.2
+PyYAML>=6.0
+cryptography>=42
+adversarial-robustness-toolbox>=1.17
+pytest>=8

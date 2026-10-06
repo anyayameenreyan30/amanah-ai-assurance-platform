@@ -1,0 +1,15 @@
+services:
+  amanah:
+    build: .
+    ports: ["8080:8080"]
+    environment:
+      AMANAH_HOME: /app/var
+    volumes: ["amanah-var:/app/var"]
+  # Optional: load var/reports/control-graph.cypher here for graph queries.
+  neo4j:
+    image: neo4j:5
+    profiles: ["graph"]
+    ports: ["7474:7474", "7687:7687"]
+    environment: {NEO4J_AUTH: neo4j/change-me-please}
+volumes:
+  amanah-var:

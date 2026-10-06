@@ -1,0 +1,104 @@
+# Threat catalog. Scores are computed per system:
+#   likelihood = base_likelihood + sum(likelihood modifiers that match the system), capped 1-5
+#   impact     = base_impact     + sum(impact modifiers that match the system),     capped 1-5
+# Modifiers keep the scoring explainable: every point can be traced to a system attribute.
+threats:
+  - id: T-EVA
+    name: Adversarial evasion
+    description: Crafted inputs flip the model's decision without changing the model.
+    applies_to: [classical_ml]
+    owasp: [ML01]
+    base_likelihood: 3
+    base_impact: 3
+    likelihood_modifiers: {exposure=public: 1, input_surface=free_text: 1}
+    impact_modifiers: {decision_criticality=high: 1}
+    controls: [A.6.2.4, A.6.2.6]
+    treatment: Adversarial robustness testing in CI, adversarial training, runtime OOD detection
+  - id: T-INJ
+    name: Prompt injection
+    description: Instructions hidden in user text or retrieved content hijack the LLM.
+    applies_to: [generative]
+    owasp: [LLM01]
+    base_likelihood: 3
+    base_impact: 4
+    likelihood_modifiers: {exposure=public: 1}
+    impact_modifiers: {tool_connected=true: 1}
+    controls: [A.6.2.4, A.6.2.6, A.9.4]
+    treatment: Input and output guard, tool allow-listing, least-privilege tool scopes, correlation with data access
+  - id: T-POI
+    name: Data poisoning
+    description: Corrupted or mislabeled training data teaches the model the wrong pattern.
+    applies_to: [classical_ml, generative]
+    owasp: [ML02, LLM04]
+    base_likelihood: 2
+    base_impact: 4
+    likelihood_modifiers: {exposure=public: 1}
+    impact_modifiers: {decision_criticality=high: 1}
+    controls: [A.7.4, A.7.5, A.6.2.4]
+    treatment: Signed data manifests, statistical poisoning scan before every training run
+  - id: T-EXT
+    name: Model extraction
+    description: Systematic querying reconstructs a copy of the model or its decision logic.
+    applies_to: [classical_ml, generative]
+    owasp: [ML05, LLM10]
+    base_likelihood: 2
+    base_impact: 3
+    likelihood_modifiers: {exposure=public: 2, exposure=partner: 1}
+    impact_modifiers: {}
+    controls: [A.6.2.6, A.6.2.8]
+    treatment: Per-client query analytics, rate limits, boundary-probing detection
+  - id: T-EXF
+    name: Data exfiltration through AI tools
+    description: An LLM with tool access is steered into pulling bulk personal data.
+    applies_to: [generative]
+    owasp: [LLM02, LLM06]
+    base_likelihood: 2
+    base_impact: 4
+    likelihood_modifiers: {exposure=public: 1, tool_connected=true: 1}
+    impact_modifiers: {personal_data=true: 1}
+    controls: [A.6.2.6, A.9.2, A.8.4]
+    treatment: Tool row limits, per-session data-access baselines, cross-system correlation
+  - id: T-LEAK
+    name: System prompt leakage
+    description: The assistant reveals its hidden instructions or configuration.
+    applies_to: [generative]
+    owasp: [LLM07]
+    base_likelihood: 3
+    base_impact: 2
+    likelihood_modifiers: {exposure=public: 1}
+    impact_modifiers: {}
+    controls: [A.6.2.4, A.6.2.6]
+    treatment: Output guard for configuration disclosure, no secrets in prompts
+  - id: T-BIAS
+    name: Unfair outcomes across customer groups
+    description: The model places a heavier false-alarm burden on one customer segment.
+    applies_to: [classical_ml]
+    owasp: []
+    base_likelihood: 3
+    base_impact: 3
+    likelihood_modifiers: {}
+    impact_modifiers: {decision_criticality=high: 1}
+    controls: [A.5.4, A.6.2.4]
+    treatment: Disparate-impact test in every pipeline run, impact assessment sign-off
+  - id: T-DRIFT
+    name: Silent performance drift
+    description: Real-world data shifts and the model's confidence and accuracy decay.
+    applies_to: [classical_ml, generative]
+    owasp: []
+    base_likelihood: 3
+    base_impact: 2
+    likelihood_modifiers: {}
+    impact_modifiers: {decision_criticality=high: 1}
+    controls: [A.6.2.6]
+    treatment: Confidence-drift and out-of-distribution monitoring with retraining triggers
+  - id: T-SUP
+    name: AI supply-chain compromise
+    description: A third-party model, API or package behaves unexpectedly or is tampered with.
+    applies_to: [generative]
+    owasp: [LLM03, ML06]
+    base_likelihood: 2
+    base_impact: 3
+    likelihood_modifiers: {}
+    impact_modifiers: {personal_data=true: 1}
+    controls: [A.10.3, A.6.2.5]
+    treatment: Supplier assessment, signed artifacts, pinned dependencies

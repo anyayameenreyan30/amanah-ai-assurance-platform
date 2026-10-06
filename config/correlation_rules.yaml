@@ -1,0 +1,33 @@
+# Cross-model correlation rules. Each rule joins events from different systems that
+# share a key (session, client, source IP) inside a time window.
+rules:
+  - id: CR-001
+    name: Prompt injection followed by bulk data access
+    description: >
+      The support assistant receives an injection attempt and, in the same session,
+      the customer data store sees an abnormal bulk read. Either alone looks minor;
+      together they are one attack using the chatbot as the way in.
+    severity: critical
+    category: coordinated_attack
+    join_key: session_id
+    window_seconds: 600
+    sequence:
+      - {system: support-llm, event_type: prompt_injection_detected}
+      - {system: customer-data-store, event_type: bulk_data_access}
+    owasp: [LLM01, LLM06, LLM02]
+    controls: [A.6.2.6, A.8.4, A.9.2]
+  - id: CR-002
+    name: Model extraction campaign
+    description: >
+      One client probes the fraud model with systematic, boundary-hugging queries
+      while also generating out-of-distribution inputs, the signature of someone
+      mapping the decision boundary.
+    severity: high
+    category: model_extraction
+    join_key: client_id
+    window_seconds: 3600
+    sequence:
+      - {system: fraud-scoring, event_type: out_of_distribution_input}
+      - {system: fraud-scoring, event_type: extraction_suspected}
+    owasp: [ML05]
+    controls: [A.6.2.6, A.6.2.8]

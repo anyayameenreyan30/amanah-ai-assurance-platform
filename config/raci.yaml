@@ -1,0 +1,37 @@
+# Who does what for every kind of finding (R=Responsible, A=Accountable,
+# C=Consulted, I=Informed). Notifications are routed from this table.
+roles:
+  model_owner: Model Owner (business owner of the AI system)
+  ml_engineer: ML Engineering
+  data_owner: Data Owner
+  security_operations: Security Operations Centre
+  ciso: Chief Information Security Officer
+  ai_risk_officer: AI Risk Officer
+  data_protection_officer: Data Protection Officer
+  executive_leadership: Executive Leadership / AI Governance Board
+  internal_audit: Internal Audit
+
+matrix:
+  robustness_failure: {R: [ml_engineer], A: [model_owner], C: [security_operations, ai_risk_officer], I: [ciso]}
+  data_poisoning:     {R: [data_owner, ml_engineer], A: [model_owner], C: [security_operations, data_protection_officer], I: [ai_risk_officer]}
+  model_extraction:   {R: [security_operations], A: [ciso], C: [model_owner], I: [ai_risk_officer]}
+  prompt_injection:   {R: [security_operations], A: [ciso], C: [model_owner], I: [ai_risk_officer]}
+  data_exfiltration:  {R: [security_operations], A: [ciso], C: [data_protection_officer, model_owner], I: [executive_leadership, ai_risk_officer]}
+  coordinated_attack: {R: [security_operations], A: [ciso], C: [data_protection_officer, model_owner, ai_risk_officer], I: [executive_leadership]}
+  fairness_issue:     {R: [ml_engineer], A: [model_owner], C: [ai_risk_officer, data_protection_officer], I: [executive_leadership]}
+  drift:              {R: [ml_engineer], A: [model_owner], C: [], I: [ai_risk_officer]}
+  conformance_gap:    {R: [ai_risk_officer], A: [executive_leadership], C: [internal_audit], I: [ciso]}
+  access_violation:   {R: [security_operations], A: [ciso], C: [], I: [ai_risk_officer]}
+  model_change:       {R: [ml_engineer], A: [ai_risk_officer], C: [model_owner, data_protection_officer], I: [ciso]}
+
+# How fast each severity must reach each audience.
+escalation:
+  critical: {notify_within_minutes: 15, open_incident: true,  inform: [executive_leadership, ciso, data_protection_officer]}
+  high:     {notify_within_minutes: 240, open_incident: true, inform: [ciso, ai_risk_officer]}
+  medium:   {notify_within_minutes: 1440, open_incident: false, inform: [ai_risk_officer]}
+  low:      {notify_within_minutes: 10080, open_incident: false, inform: []}
+
+# Sign-off required before a change reaches production.
+signoff_rules:
+  high_risk_change:     [ai_risk_officer, model_owner]
+  personal_data_change: [data_protection_officer]

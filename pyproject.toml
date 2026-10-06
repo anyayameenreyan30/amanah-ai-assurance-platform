@@ -1,0 +1,9 @@
+[project]
+name = "amanah"
+version = "1.0.0"
+description = "ISO/IEC 42001-aligned AI governance and security assurance platform"
+requires-python = ">=3.10"
+[project.scripts]
+amanah = "amanah.cli:main"
+[tool.pytest.ini_options]
+filterwarnings = ["ignore::UserWarning"]

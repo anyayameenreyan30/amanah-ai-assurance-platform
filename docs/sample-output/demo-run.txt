@@ -1,0 +1,84 @@
+
+=== 1. Set up the AI management system ======================================
+Workspace: /home/claude/amanah/var
+Governance documents approved: 5  (drafts are left out on purpose)
+Datasets signed: reference, train-batch, holdout, partner-batch
+Risks assessed: 12  Impact assessments drafted: IA-0EAB5E21, IA-C63D3A1D
+
+=== 2. Quarterly retrain, standard training (change CHG-Q4) =================
+  [PASS ] data   provenance=True suspect_rate=0.85%
+  [PASS ] train  
+  [PASS ] sign   v1 sha256=33476b45eeba7d9a...
+  [FAIL ] test   acc=0.985 recall=0.928 robust_recall=0.368 evasion=0.603 FPR=0.009 DI=0.981
+  [FAIL ] gate   engine=opa
+  [FAIL ] deploy 
+  Outcome: REJECTED
+    - evasion success rate 0.603 above 0.25 (A.6.2.4, OWASP ML01)
+    - impact assessment not approved (Clause 8.4, A.5.2)
+    - missing sign-off from ai_risk_officer (Clause 6.3)
+    - missing sign-off from data_protection_officer (Clause 6.3)
+    - missing sign-off from model_owner (Clause 6.3)
+    - robust fraud recall 0.368 under PGD below 0.70 (A.6.2.4, OWASP ML01)
+
+=== 3. Mitigation: retrain with ART adversarial training (same change) ======
+  [PASS ] data   provenance=True suspect_rate=0.85%
+  [PASS ] train  
+  [PASS ] sign   v2 sha256=339a6bb7443687a8...
+  [PASS ] test   acc=0.958 recall=0.860 robust_recall=0.734 evasion=0.146 FPR=0.031 DI=0.986
+  [FAIL ] gate   engine=opa
+  [HELD ] deploy 
+  Outcome: AWAITING_APPROVAL
+    - impact assessment not approved (Clause 8.4, A.5.2)
+    - missing sign-off from ai_risk_officer (Clause 6.3)
+    - missing sign-off from data_protection_officer (Clause 6.3)
+    - missing sign-off from model_owner (Clause 6.3)
+
+=== 4. Humans review and sign off, gate re-checked ==========================
+  signed: ai_risk_officer (A. Rahman)
+  signed: model_owner (J. Patel)
+  signed: data_protection_officer (M. Okafor)
+  Gate re-check: ALLOW -> DEPLOYED
+
+=== 5. Attack: poisoned labels through the chargeback channel ===============
+  [FAIL ] data   provenance=True suspect_rate=3.74%
+  Outcome: BLOCKED_AT_DATA
+    - 385 suspicious rows; coordinated cluster of 267
+  Detector caught 300/300 poisoned rows (recall 1.0, precision 0.779)
+
+=== 6. Attack: training data altered after signing ==========================
+  [FAIL ] data   provenance=False suspect_rate=0.89%
+  Outcome: BLOCKED_AT_DATA
+    - dataset content does not match the signed hash (tampered)
+
+=== 7. Attack: model file tampering and a privilege bypass attempt ==========
+  Altered model artifact signature valid? False  (restored: True)
+  ML engineer promoting directly to production: role 'ml_engineer' may not write production_promotion
+
+=== 8. Live traffic: customers, a busy partner, and a model-extraction attacker ===
+  Predictions: 3549  OOD flagged: 865  extraction alerts: 1
+  partner-acquirer-01  queries= 900 boundary_ratio=0.06 coverage_entropy=0.44
+  api-key-7731         queries= 900 boundary_ratio=0.16 coverage_entropy=0.91
+
+=== 9. Support assistant: customers, a blatant attack, a subtle coordinated attack ===
+  Messages: 62  blocked: 1  flagged (allowed): 1
+  Subtle message score 0.75 -> flag (privilege_claim, tool_coercion, bulk_data_request)
+  Same session then read 1200 customer rows
+
+=== 10. Cross-model correlation =============================================
+  CR-001 fired on S-7777 across customer-data-store, support-llm -> finding F-9DD95F32
+  CR-002 fired on api-key-7731 across fraud-scoring -> finding F-9D568440
+
+=== 11. Incident response ===================================================
+  INC-1F1316E8 [high] Training batch 'partner-batch' quarantined before training -> closed
+  INC-0FC5E8AA [high] Training batch 'tampered-batch' quarantined before training -> closed
+  INC-B8BF3FE6 [critical] CR-001 Prompt injection followed by bulk data access (sessio -> closed
+  INC-C3B81FBD [high] CR-002 Model extraction campaign (client_id=api-key-7731) -> closed
+
+=== 12. Conformance, audit and reporting ====================================
+  Annex A: 36/38 implemented, 0 partial, 2 gap
+  Clauses: 4:100%  5:100%  6:100%  7:60%  8:100%  9:100%  10:100%
+  Internal audit: 4 nonconformities; evidence chain intact (83 entries)
+  Gaps pushed back into the risk register: 4
+  Audit pack: /home/claude/amanah/var/reports/audit-evidence-pack.zip
+  Dashboard: /home/claude/amanah/var/reports/dashboard.html
+  Demo finished in 13s. Open /home/claude/amanah/var/reports/dashboard.html

@@ -1,0 +1,81 @@
+# Amanah platform configuration.
+organization:
+  name: Meridian Financial (reference deployment)
+  aims_scope: >
+    Design, deployment and operation of the fraud-scoring model, the customer
+    support assistant (LLM) and the customer data store that serves them.
+  interested_parties:
+    - {party: Customers, expectation: Fair decisions, privacy, ability to contest a decision}
+    - {party: Regulators, expectation: Evidence of risk management and incident reporting}
+    - {party: Executive leadership, expectation: AI risk within appetite}
+    - {party: Merchants and partners, expectation: Reliable fraud screening}
+  resources:
+    compute: Containerised CPU workers (Docker); GPU optional for retraining
+    tooling: [Python 3.11+, IBM Adversarial Robustness Toolbox, Open Policy Agent, SQLite/PostgreSQL, Neo4j (optional), SIEM forwarder]
+    storage: Model registry and evidence ledger on encrypted volume
+
+ai_systems:
+  - id: fraud-scoring
+    name: Card fraud scoring model
+    type: classical_ml
+    owner_role: model_owner
+    exposure: internal          # internal | partner | public
+    input_surface: structured   # structured | free_text
+    tool_connected: false
+    personal_data: true
+    decision_criticality: high  # affects individuals' payments
+    supplier: null
+  - id: support-llm
+    name: Customer support assistant
+    type: generative
+    owner_role: model_owner
+    exposure: public
+    input_surface: free_text
+    tool_connected: true        # can call lookup tools on the customer data store
+    personal_data: true
+    decision_criticality: medium
+    supplier: External LLM API provider (contracted)
+  - id: customer-data-store
+    name: Customer data store and feature pipeline
+    type: data_pipeline
+    owner_role: data_owner
+    exposure: internal
+    input_surface: structured
+    tool_connected: false
+    personal_data: true
+    decision_criticality: high
+    supplier: null
+
+# Deployment-gate thresholds, passed to the OPA policy as input.thresholds.
+thresholds:
+  min_clean_accuracy: 0.90
+  min_clean_fraud_recall: 0.80
+  min_robust_fraud_recall: 0.70     # fraud recall under PGD at the gate epsilon
+  max_evasion_success_rate: 0.25    # share of caught fraud an attacker can flip to "legit"
+  gate_epsilon: 0.10                # perturbation budget on attacker-controlled features (scaled 0-1)
+  max_false_positive_rate: 0.05     # legitimate payments wrongly flagged (customer friction)
+  min_disparate_impact: 0.80        # four-fifths rule on legitimate-payment pass rates across segments
+  max_poisoning_suspect_rate: 0.015 # share of a training batch flagged as suspicious
+
+runtime:
+  ood_percentile: 99.5
+  confidence_drift_window: 200
+  confidence_drift_drop: 0.10
+  extraction_window_queries: 500
+  extraction_boundary_ratio: 0.30   # share of queries landing near the decision boundary
+  extraction_coverage_entropy: 0.80 # normalised entropy of probed feature space
+  exfil_rows_threshold: 500         # rows returned to one session in the window
+
+# Role-based access control for sensitive assets (least privilege).
+access_control:
+  model_weights:       {read: [ml_engineer, pipeline_service], write: [pipeline_service]}
+  training_data:       {read: [ml_engineer, data_owner, pipeline_service], write: [data_owner, pipeline_service]}
+  vulnerability_findings: {read: [security_operations, ai_risk_officer, ciso], write: [pipeline_service, security_operations]}
+  production_promotion: {write: [pipeline_service]}
+  signoff:             {write: [ai_risk_officer, model_owner, data_protection_officer, ciso]}
+
+risk_levels:          # score = likelihood x impact (1-25)
+  critical: 20
+  high: 12
+  medium: 6
+  low: 1

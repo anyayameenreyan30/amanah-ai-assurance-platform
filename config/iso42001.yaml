@@ -1,0 +1,147 @@
+# ISO/IEC 42001:2023 reference catalog used by Amanah.
+# Clauses 4-10 are mandatory requirements. Annex A holds 38 reference controls
+# in nine objectives (A.2-A.10); applicability is decided in the Statement of
+# Applicability (Clause 6.1.3).
+#
+# "evidence" lists the evidence types the platform must hold for an item to count
+# as satisfied. Every evidence type is produced by a platform action (pipeline,
+# monitoring, governance workflow) or by registering an approved governance document.
+# Titles are short paraphrases for display; consult the licensed standard text for
+# the normative wording.
+
+clauses:
+  - id: "4"
+    title: Context of the organization
+    pdca: Plan
+    requirements:
+      - {id: "4.1", title: Organization and its context, evidence: [scope_doc]}
+      - {id: "4.2", title: Needs of interested parties, evidence: [scope_doc]}
+      - {id: "4.3", title: Scope of the AI management system, evidence: [scope_doc, system_inventory]}
+      - {id: "4.4", title: AI management system established, evidence: [ai_policy_doc, system_inventory]}
+  - id: "5"
+    title: Leadership
+    pdca: Plan
+    requirements:
+      - {id: "5.1", title: Leadership and commitment, evidence: [ai_policy_doc, management_review]}
+      - {id: "5.2", title: AI policy, evidence: [ai_policy_doc]}
+      - {id: "5.3", title: Roles, responsibilities and authorities, evidence: [roles_raci]}
+  - id: "6"
+    title: Planning
+    pdca: Plan
+    requirements:
+      - {id: "6.1.2", title: AI risk assessment process, evidence: [risk_methodology_doc, risk_register]}
+      - {id: "6.1.3", title: AI risk treatment and Statement of Applicability, evidence: [risk_treatment, soa]}
+      - {id: "6.1.4", title: AI system impact assessment process, evidence: [impact_assessment]}
+      - {id: "6.2", title: AI objectives and planning, evidence: [ai_policy_doc]}
+      - {id: "6.3", title: Planning of changes, evidence: [signoff_record]}
+  - id: "7"
+    title: Support
+    pdca: Do
+    requirements:
+      - {id: "7.1", title: Resources, evidence: [resource_doc]}
+      - {id: "7.2", title: Competence, evidence: [competence_record]}
+      - {id: "7.3", title: Awareness, evidence: [competence_record]}
+      - {id: "7.4", title: Communication, evidence: [stakeholder_notification]}
+      - {id: "7.5", title: Documented information, evidence: [evidence_chain_verified]}
+  - id: "8"
+    title: Operation
+    pdca: Do
+    requirements:
+      - {id: "8.1", title: Operational planning and control, evidence: [pipeline_run, deployment_gate]}
+      - {id: "8.2", title: AI risk assessment (performed), evidence: [risk_register]}
+      - {id: "8.3", title: AI risk treatment (performed), evidence: [risk_treatment]}
+      - {id: "8.4", title: AI system impact assessment (performed), evidence: [impact_assessment]}
+  - id: "9"
+    title: Performance evaluation
+    pdca: Check
+    requirements:
+      - {id: "9.1", title: Monitoring, measurement, analysis and evaluation, evidence: [runtime_monitoring, robustness_test]}
+      - {id: "9.2", title: Internal audit, evidence: [internal_audit]}
+      - {id: "9.3", title: Management review, evidence: [management_review]}
+  - id: "10"
+    title: Improvement
+    pdca: Act
+    requirements:
+      - {id: "10.1", title: Continual improvement, evidence: [corrective_action]}
+      - {id: "10.2", title: Nonconformity and corrective action, evidence: [incident_record, corrective_action]}
+
+annex_a:
+  - objective: A.2
+    title: Policies related to AI
+    controls:
+      - {id: A.2.2, title: AI policy, evidence: [ai_policy_doc]}
+      - {id: A.2.3, title: Alignment with other organizational policies, evidence: [ai_policy_doc]}
+      - {id: A.2.4, title: Review of the AI policy, evidence: [policy_review]}
+  - objective: A.3
+    title: Internal organization
+    controls:
+      - {id: A.3.2, title: AI roles and responsibilities, evidence: [roles_raci]}
+      - {id: A.3.3, title: Reporting of concerns, evidence: [concern_channel]}
+  - objective: A.4
+    title: Resources for AI systems
+    controls:
+      - {id: A.4.2, title: Resource documentation, evidence: [resource_doc]}
+      - {id: A.4.3, title: Data resources, evidence: [data_provenance]}
+      - {id: A.4.4, title: Tooling resources, evidence: [resource_doc]}
+      - {id: A.4.5, title: System and computing resources, evidence: [resource_doc]}
+      - {id: A.4.6, title: Human resources, evidence: [competence_record]}
+  - objective: A.5
+    title: Assessing impacts of AI systems
+    controls:
+      - {id: A.5.2, title: AI system impact assessment process, evidence: [impact_assessment]}
+      - {id: A.5.3, title: Documentation of AI system impact assessments, evidence: [impact_assessment]}
+      - {id: A.5.4, title: Assessing impacts on individuals or groups, evidence: [fairness_test]}
+      - {id: A.5.5, title: Assessing societal impacts, evidence: [impact_assessment]}
+  - objective: A.6
+    title: AI system life cycle
+    controls:
+      - {id: A.6.1.2, title: Objectives for responsible development, evidence: [ai_policy_doc]}
+      - {id: A.6.1.3, title: Processes for responsible design and development, evidence: [pipeline_run]}
+      - {id: A.6.2.2, title: AI system requirements and specification, evidence: [model_card]}
+      - {id: A.6.2.3, title: Documentation of design and development, evidence: [model_card, training_record]}
+      - {id: A.6.2.4, title: AI system verification and validation, evidence: [robustness_test, poisoning_scan, fairness_test]}
+      - {id: A.6.2.5, title: AI system deployment, evidence: [deployment_gate, model_signature]}
+      - {id: A.6.2.6, title: AI system operation and monitoring, evidence: [runtime_monitoring]}
+      - {id: A.6.2.7, title: AI system technical documentation, evidence: [model_card]}
+      - {id: A.6.2.8, title: AI system recording of event logs, evidence: [event_log]}
+  - objective: A.7
+    title: Data for AI systems
+    controls:
+      - {id: A.7.2, title: Data for development and enhancement, evidence: [data_quality]}
+      - {id: A.7.3, title: Acquisition of data, evidence: [data_provenance]}
+      - {id: A.7.4, title: Quality of data for AI systems, evidence: [data_quality, poisoning_scan]}
+      - {id: A.7.5, title: Data provenance, evidence: [data_provenance]}
+      - {id: A.7.6, title: Data preparation, evidence: [data_preparation]}
+  - objective: A.8
+    title: Information for interested parties
+    controls:
+      - {id: A.8.2, title: System documentation and information for users, evidence: [model_card]}
+      - {id: A.8.3, title: External reporting, evidence: [board_report]}
+      - {id: A.8.4, title: Communication of incidents, evidence: [stakeholder_notification, incident_record]}
+      - {id: A.8.5, title: Information for interested parties, evidence: [board_report]}
+  - objective: A.9
+    title: Use of AI systems
+    controls:
+      - {id: A.9.2, title: Processes for responsible use, evidence: [acceptable_use_doc, runtime_monitoring]}
+      - {id: A.9.3, title: Objectives for responsible use, evidence: [acceptable_use_doc]}
+      - {id: A.9.4, title: Intended use of the AI system, evidence: [model_card]}
+  - objective: A.10
+    title: Third-party and customer relationships
+    controls:
+      - {id: A.10.2, title: Allocation of responsibilities, evidence: [roles_raci, supplier_assessment]}
+      - {id: A.10.3, title: Suppliers, evidence: [supplier_assessment]}
+      - {id: A.10.4, title: Customers, evidence: [customer_terms_doc]}
+
+# Crosswalks used in board and regulator reports.
+nist_ai_rmf:
+  GOVERN: [ai_policy_doc, roles_raci, signoff_record, management_review]
+  MAP: [system_inventory, risk_register, impact_assessment]
+  MEASURE: [robustness_test, poisoning_scan, fairness_test, runtime_monitoring]
+  MANAGE: [risk_treatment, deployment_gate, incident_record, corrective_action]
+iso_23894:
+  "Risk identification": [risk_register]
+  "Risk analysis": [risk_register, robustness_test]
+  "Risk evaluation": [risk_register, deployment_gate]
+  "Risk treatment": [risk_treatment, corrective_action]
+  "Monitoring and review": [runtime_monitoring, internal_audit]
+  "Recording and reporting": [event_log, board_report]

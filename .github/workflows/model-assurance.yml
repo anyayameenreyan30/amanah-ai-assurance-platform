@@ -1,0 +1,31 @@
+# Runs the secure pipeline on every change to models, data, config or policy.
+# The workflow fails if the policy tests or the unit tests fail; reports are kept
+# as build artifacts so every release carries its own audit evidence.
+name: model-assurance
+on:
+  push:
+    paths: ["amanah/**", "config/**", "policies/**", "governance/**"]
+  workflow_dispatch:
+  schedule:
+    - cron: "0 3 * * 1"   # weekly re-test against current attacks
+jobs:
+  assure:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - run: pip install -r requirements.txt
+      - run: make opa
+      - name: Policy unit tests (OPA)
+        run: bin/opa test policies -v
+      - name: Platform unit tests
+        run: pytest -q
+      - name: Pipeline, attacks, conformance
+        run: python -m amanah demo
+      - name: Evidence chain must be intact
+        run: python -m amanah verify
+      - uses: actions/upload-artifact@v4
+        with:
+          name: assurance-reports
+          path: var/reports/

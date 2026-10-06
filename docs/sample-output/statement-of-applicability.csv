@@ -1,0 +1,39 @@
+Control,Title,Applicable,Justification,Status,Evidence held,Missing evidence,Linked risks
+A.2.2,AI policy,Yes,Applicable to all in-scope AI systems,implemented,1,,
+A.2.3,Alignment with other organizational policies,Yes,Applicable to all in-scope AI systems,implemented,1,,
+A.2.4,Review of the AI policy,Yes,Applicable to all in-scope AI systems,implemented,1,,
+A.3.2,AI roles and responsibilities,Yes,Applicable to all in-scope AI systems,implemented,1,,
+A.3.3,Reporting of concerns,Yes,Applicable to all in-scope AI systems,implemented,1,,
+A.4.2,Resource documentation,Yes,Applicable to all in-scope AI systems,implemented,1,,
+A.4.3,Data resources,Yes,Applicable to all in-scope AI systems,implemented,4,,
+A.4.4,Tooling resources,Yes,Applicable to all in-scope AI systems,implemented,1,,
+A.4.5,System and computing resources,Yes,Applicable to all in-scope AI systems,implemented,1,,
+A.4.6,Human resources,Yes,Treats 1 assessed risk(s),gap,0,competence_record,R-AIMS-GAP-A.4.6
+A.5.2,AI system impact assessment process,Yes,Applicable to all in-scope AI systems,implemented,3,,
+A.5.3,Documentation of AI system impact assessments,Yes,Applicable to all in-scope AI systems,implemented,3,,
+A.5.4,Assessing impacts on individuals or groups,Yes,Treats 1 assessed risk(s),implemented,2,,R-fraud-scoring-T-BIAS
+A.5.5,Assessing societal impacts,Yes,Applicable to all in-scope AI systems,implemented,3,,
+A.6.1.2,Objectives for responsible development,Yes,Applicable to all in-scope AI systems,implemented,1,,
+A.6.1.3,Processes for responsible design and development,Yes,Applicable to all in-scope AI systems,implemented,4,,
+A.6.2.2,AI system requirements and specification,Yes,Applicable to all in-scope AI systems,implemented,2,,
+A.6.2.3,Documentation of design and development,Yes,Applicable to all in-scope AI systems,implemented,4,,
+A.6.2.4,AI system verification and validation,Yes,Treats 6 assessed risk(s),implemented,8,,R-fraud-scoring-T-EVA; R-fraud-scoring-T-POI; R-fraud-scoring-T-BIAS; R-support-llm-T-INJ; R-support-llm-T-POI; R-support-llm-T-LEAK
+A.6.2.5,AI system deployment,Yes,Treats 1 assessed risk(s),implemented,6,,R-support-llm-T-SUP
+A.6.2.6,AI system operation and monitoring,Yes,Treats 8 assessed risk(s),implemented,2,,R-fraud-scoring-T-EVA; R-fraud-scoring-T-EXT; R-fraud-scoring-T-DRIFT; R-support-llm-T-INJ; R-support-llm-T-EXT; R-support-llm-T-EXF; R-support-llm-T-LEAK; R-support-llm-T-DRIFT
+A.6.2.7,AI system technical documentation,Yes,Applicable to all in-scope AI systems,implemented,2,,
+A.6.2.8,AI system recording of event logs,Yes,Treats 2 assessed risk(s),implemented,1,,R-fraud-scoring-T-EXT; R-support-llm-T-EXT
+A.7.2,Data for development and enhancement,Yes,Applicable to all in-scope AI systems,implemented,4,,
+A.7.3,Acquisition of data,Yes,Applicable to all in-scope AI systems,implemented,4,,
+A.7.4,Quality of data for AI systems,Yes,Treats 2 assessed risk(s),implemented,8,,R-fraud-scoring-T-POI; R-support-llm-T-POI
+A.7.5,Data provenance,Yes,Treats 2 assessed risk(s),implemented,4,,R-fraud-scoring-T-POI; R-support-llm-T-POI
+A.7.6,Data preparation,Yes,Applicable to all in-scope AI systems,implemented,2,,
+A.8.2,System documentation and information for users,Yes,Applicable to all in-scope AI systems,implemented,2,,
+A.8.3,External reporting,Yes,Applicable to all in-scope AI systems,implemented,1,,
+A.8.4,Communication of incidents,Yes,Treats 1 assessed risk(s),implemented,17,,R-support-llm-T-EXF
+A.8.5,Information for interested parties,Yes,Applicable to all in-scope AI systems,implemented,1,,
+A.9.2,Processes for responsible use,Yes,Treats 1 assessed risk(s),implemented,3,,R-support-llm-T-EXF
+A.9.3,Objectives for responsible use,Yes,Applicable to all in-scope AI systems,implemented,1,,
+A.9.4,Intended use of the AI system,Yes,Treats 1 assessed risk(s),implemented,2,,R-support-llm-T-INJ
+A.10.2,Allocation of responsibilities,Yes,Applicable to all in-scope AI systems,implemented,2,,
+A.10.3,Suppliers,Yes,Treats 1 assessed risk(s),implemented,1,,R-support-llm-T-SUP
+A.10.4,Customers,Yes,Treats 1 assessed risk(s),gap,0,customer_terms_doc,R-AIMS-GAP-A.10.4
